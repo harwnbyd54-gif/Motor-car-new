@@ -1,0 +1,42 @@
+def calculate_jet_thrust(mass_flow_rate, v_exit, v_initial, p_exit, p_ambient, area_exit):
+    """
+    حساب قوة الدفع الناتجة عن ضغط وإطلاق الهواء في نفق السيارة الطائرة
+    """
+    # الجزء الأول: قوة الدفع الناتجة عن تغير كمية الحركة (Momentum Thrust)
+    momentum_thrust = mass_flow_rate * (v_exit - v_initial)
+    
+    # الجزء الثاني: قوة الدفع الناتجة عن فرق الضغط (Pressure Thrust)
+    pressure_thrust = (p_exit - p_ambient) * area_exit
+    
+    # قوة الدفع الكلية (Force)
+    total_thrust = momentum_thrust + pressure_thrust
+    return total_thrust
+
+# --- تجربة افتراضية للسيارة الطائرة ---
+# معدل تدفق الكتلة (كجم / ثانية)
+m_dot = 25.0  
+
+# سرعة دخول الهواء (سرعة حركة السيارة م/ث، مثلاً 30 متر/ثانية)
+v_0 = 30.0  
+
+# سرعة خروج الهواء المضغوط من النفق (م/ث، بعد الضغط والتسريع)
+v_e = 150.0  
+
+# الضغط عند مخرج الفوهة والضغط الجوي (باسكال)
+P_e = 120000  
+P_0 = 101325  
+
+# مساحة مقطع المخرج (متر مربع)
+A_e = 0.15  
+
+# حساب النتيجة
+thrust_force = calculate_jet_thrust(m_dot, v_e, v_0, P_e, P_0, A_e)
+
+print(f"قوة الدفع المتولدة من نفق الهواء المضغوط: {thrust_force:.2f} نيوتن")
+
+# تقدير ما إذا كانت القوة كافية لرفع سيارة وزنها 1500 كجم (تتطلب قوة رفع تتجاوز 14700 نيوتن تقريباً)
+required_weight_force = 1500 * 9.81
+if thrust_force >= required_weight_force:
+    print("الحالة: القوة كافية للإقلاع والرفع!")
+else:
+    print(f"الحالة: القوة غير كافية للرفع الفوري، النقص الحالي يبلغ: {required_weight_force - thrust_force:.2f} نيوتن")
